@@ -17,45 +17,31 @@ chrome_options.add_experimental_option("prefs", prefs)
 service = Service('chromedriver-mac-arm64/chromedriver')
 driver = webdriver.Chrome(options=chrome_options, service=service)
 
-# Load login page
+# Load the webpage
 driver.get('https://demoqa.com/login')
 
 # Locate username, password and login button
-username_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'userName'))
-)
-password_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'password'))
-)
+username_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'userName')))
+password_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'password')))
 login_button = driver.find_element(By.ID, 'login')
 
-# Fill in credentials and login
+# Fill in username and password and click the button
 username_field.send_keys('Python_learning')
 password_field.send_keys('@Python1977')
 driver.execute_script("arguments[0].click();", login_button)
 
-# Go directly to the text-box page
-driver.get("https://demoqa.com/text-box")
+# Locate the elements dropdown and text box
+elements = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div/div/div[1]/span/div/div[1]')))
+elements.click()
 
-# Remove annoying ads
-driver.execute_script("""
-    let ads = document.querySelectorAll('iframe');
-    ads.forEach(ad => ad.remove());
-""")
+text_box = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'item-0')))
+text_box.click()
 
-# Locate the form elements
-fullname_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'userName'))
-)
-email_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'userEmail'))
-)
-current_address_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'currentAddress'))
-)
-permanent_address_field = WebDriverWait(driver, 10).until(
-    EC.visibility_of_element_located((By.ID, 'permanentAddress'))
-)
+# Locate the form elements and submit button
+fullname_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'userName')))
+email_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'userEmail')))
+current_address_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'currentAddress')))
+permanent_address_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'permanentAddress')))
 submit_button = driver.find_element(By.ID, 'submit')
 
 # Fill in the form fields
@@ -63,23 +49,18 @@ fullname_field.send_keys('John Smith')
 email_field.send_keys('python1app1.dev@gmail.com')
 current_address_field.send_keys('Random St 100, Random town, Random Country')
 permanent_address_field.send_keys('Random St 100, Random town, Random Country')
-
 driver.execute_script("arguments[0].click();", submit_button)
 
-# Navigate directly to upload-download instead of clicking item-7
-# (ads were intercepting the click and preventing navigation)
-driver.get("https://demoqa.com/upload-download")
-
-# Remove ads on the new page
+# Remove annoying ads/overlays
 driver.execute_script("""
     let ads = document.querySelectorAll('iframe');
     ads.forEach(ad => ad.remove());
 """)
 
-# Wait for downloadButton to be clickable and click it
-download_button = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.ID, 'downloadButton'))
-)
+# Locate the upload and download section and the download button
+upload_download = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'item-7')))
+upload_download.click()
+download_button = driver.find_element(By.ID, 'downloadButton')
 driver.execute_script("arguments[0].click();", download_button)
 
 input("Press Enter to close the browser")
