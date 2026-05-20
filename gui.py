@@ -1,10 +1,13 @@
 import tkinter as tk
+from tkinter import messagebox
 from main import WebAutomation
 
 class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Web Automation GUI")
+
+        self.bot = None
 
         # Login frame
         self.login_frame = tk.Frame(self.root)
@@ -57,9 +60,14 @@ class App:
         self.bot.login(username, password)
         self.bot.fill_form(fullname, email, current_address, permanent_address)
 
+        self.bot.download()
 
     def close_browser(self):
-        self.web_automation.close()
+        if self.bot is not None:
+            self.bot.close()
+            messagebox.showinfo("Browser Close","Submitted Successfully")
+        else:
+            messagebox.showwarning("No Browser", "No browser is open yet — press Submit first.")
 
 
 root = tk.Tk()
