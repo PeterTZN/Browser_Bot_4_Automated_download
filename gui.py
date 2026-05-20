@@ -73,3 +73,5 @@ class App:
 root = tk.Tk()
 app = App(root)
 root.mainloop()
+
+# Finished for now 20/05/2026
